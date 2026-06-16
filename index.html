@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS 2章 IDおよびアクセス管理 学習マップ</title>
+<style>
+  :root{
+    --ink:#1a2b3c; --ink-soft:#52606d; --paper:#f4f1ea; --card:#ffffff;
+    --line:#e2ddd2; --accent:#d96e3f; --accent-soft:#fbeee7;
+    --blue:#3b6ea5; --blue-bg:#e8f0f8;
+    --teal:#1d7a5e; --teal-bg:#e2f2ec;
+    --purple:#5a4f9e; --purple-bg:#eceaf7;
+    --amber:#b07514; --amber-bg:#faf0dc;
+    --red:#b0392f; --red-bg:#fbe9e7;
+    --green:#4a7a1f; --green-bg:#edf4e1;
+    --coral:#c4502c; --coral-bg:#fae8e1;
+    --gray:#5f5e5a; --gray-bg:#f0ede5;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{background:var(--ink); color:var(--paper); padding:26px 20px 22px; text-align:center}
+  header .eyebrow{font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:8px}
+  header h1{font-size:22px; font-weight:700; letter-spacing:1px}
+  header p{font-size:13px; color:#b8c2cc; margin-top:10px; line-height:1.6}
+
+  nav{position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:1px solid var(--line); display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  nav button{flex:0 0 auto; white-space:nowrap; background:none; border:none; padding:14px 16px; font-size:13px; font-weight:600; color:var(--ink-soft); font-family:inherit; cursor:pointer; border-bottom:3px solid transparent; transition:color .2s}
+  nav button .num{display:inline-block; min-width:32px; padding:0 6px; height:20px; line-height:20px; border-radius:10px; background:var(--line); color:var(--ink-soft); font-size:11px; text-align:center; margin-right:6px; transition:all .2s}
+  nav button.active{color:var(--accent); border-bottom-color:var(--accent)}
+  nav button.active .num{background:var(--accent); color:#fff}
+
+  main{padding:20px 16px 60px; max-width:760px; margin:0 auto}
+  .panel{display:none; animation:fade .35s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0; transform:translateY(8px)}to{opacity:1; transform:none}}
+
+  .lead{font-size:14px; color:var(--ink-soft); margin-bottom:18px; padding-left:14px; border-left:3px solid var(--accent)}
+  h2{font-size:18px; margin-bottom:14px; letter-spacing:.5px}
+  h2 .code{font-size:13px; color:var(--accent); font-weight:600; margin-right:8px}
+
+  .item{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px 16px; margin-bottom:11px; border-left:4px solid var(--blue)}
+  .item .head{display:flex; align-items:baseline; gap:8px; margin-bottom:5px; flex-wrap:wrap}
+  .item .secno{font-size:11px; font-weight:700; color:var(--blue); background:var(--blue-bg); padding:2px 8px; border-radius:20px; white-space:nowrap}
+  .item h3{font-size:15px; font-weight:700}
+  .item .role{font-size:12.5px; color:var(--accent); font-weight:600; margin-bottom:7px}
+  .item p{font-size:13.5px; color:var(--ink-soft)}
+  .item p+p{margin-top:7px}
+  .item .gloss{display:block; font-size:12px; color:var(--ink-soft); background:var(--gray-bg); border-radius:8px; padding:8px 11px; margin-top:9px}
+  .item .gloss b{color:var(--ink)}
+  .item.win{border-left-color:var(--teal)}
+  .item.win .secno{color:var(--teal); background:var(--teal-bg)}
+  .item.win h3{color:var(--ink)}
+
+  .winbox{background:var(--teal-bg); border-radius:8px; padding:8px 11px; margin-top:9px; font-size:12px; color:var(--teal)}
+  .winbox b{color:var(--teal)}
+
+  .note{background:var(--gray-bg); border-radius:var(--radius); padding:14px 16px; margin-top:16px}
+  .note strong{font-size:13px; display:block; margin-bottom:8px}
+  .note ul{list-style:none; font-size:13px; color:var(--ink-soft)}
+  .note li{padding-left:16px; position:relative; margin-bottom:6px}
+  .note li::before{content:"–"; position:absolute; left:0; color:var(--accent)}
+
+  footer{text-align:center; font-size:11px; color:var(--ink-soft); padding:24px 20px 40px}
+
+  /* governance page */
+  nav button[data-target="s7"]{color:var(--accent)}
+  nav button[data-target="s7"] .num{background:var(--accent-soft); color:var(--accent); font-size:13px}
+  nav button[data-target="s7"].active .num{background:var(--accent); color:#fff}
+
+  .gov-intro{font-size:14px; color:var(--ink-soft); margin-bottom:20px; padding-left:14px; border-left:3px solid var(--accent)}
+  .layer{position:relative; border-radius:18px; padding:18px 16px 16px; margin-bottom:0}
+  .layer-l3{background:var(--blue-bg); border:2px dashed var(--blue); padding-bottom:22px}
+  .layer-l2{background:var(--red-bg); border:2px solid var(--red); margin-top:14px}
+  .layer-l1{background:var(--amber-bg); border:2px solid var(--amber); margin-top:14px}
+  .layer-label{display:flex; align-items:center; gap:9px; margin-bottom:6px; flex-wrap:wrap}
+  .layer-badge{font-size:11px; font-weight:700; padding:3px 11px; border-radius:20px; color:#fff; white-space:nowrap}
+  .badge-l3{background:var(--blue)} .badge-l2{background:var(--red)} .badge-l1{background:var(--amber)}
+  .layer-title{font-size:15px; font-weight:700}
+  .layer-sub{font-size:12.5px; color:var(--ink-soft); margin-bottom:12px}
+  .layer-l3>.layer-sub,.layer-l2>.layer-sub{margin-bottom:4px}
+
+  .func-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+  .func{background:#fff; border-radius:11px; padding:11px 12px; border-top:3px solid var(--blue)}
+  .func.f-role{border-top-color:var(--green)}
+  .func.f-group{border-top-color:var(--purple)}
+  .func.f-policy{border-top-color:var(--coral)}
+  .func .fname{font-size:13.5px; font-weight:700; display:block}
+  .func .fdesc{font-size:11.5px; color:var(--ink-soft)}
+  .func .ftag{font-size:10px; font-weight:700; padding:1px 7px; border-radius:10px; background:var(--blue-bg); color:var(--blue); float:right}
+  .func.f-role .ftag{background:var(--green-bg); color:var(--green)}
+  .func.f-group .ftag{background:var(--purple-bg); color:var(--purple)}
+  .func.f-policy .ftag{background:var(--coral-bg); color:var(--coral)}
+  .func-note{font-size:12px; color:var(--ink-soft); background:rgba(255,255,255,.6); border-radius:9px; padding:9px 11px; margin-top:11px}
+
+  .flow-down{text-align:center; font-size:11px; color:var(--ink-soft); padding:7px 0 3px; font-weight:600; letter-spacing:.5px}
+  .layer-foot{font-size:12px; margin-top:11px; padding:9px 11px; border-radius:9px; background:rgba(255,255,255,.55)}
+  .layer-foot b{color:var(--ink)}
+
+  .decision{margin-top:22px}
+  .decision .dgrid{display:grid; grid-template-columns:1fr; gap:10px}
+  .dcard{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 15px; border-left:4px solid var(--accent)}
+  .dcard .dlabel{font-size:11px; font-weight:700; color:var(--accent); letter-spacing:1px; text-transform:uppercase}
+  .dcard h4{font-size:14px; margin:3px 0 5px}
+  .dcard p{font-size:12.5px; color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Learning Map ・ Chapter 2</div>
+  <h1>IDおよびアクセス管理</h1>
+  <p>運用支援に触り始めた初学者のための<br>2章まるごと体系ガイド</p>
+</header>
+
+<nav>
+  <button class="active" data-target="s1"><span class="num">2-1</span>導入</button>
+  <button data-target="s2"><span class="num">2-2</span>IAM</button>
+  <button data-target="s3"><span class="num">2-3</span>Directory</button>
+  <button data-target="s4"><span class="num">2-4</span>Cognito</button>
+  <button data-target="s5"><span class="num">2-5</span>実例</button>
+  <button data-target="s6"><span class="num">2-6</span>まとめ</button>
+  <button data-target="s7"><span class="num">★</span>統制図</button>
+</nav>
+
+<main>
+  <!-- 2-1 -->
+  <section class="panel active" id="s1">
+    <p class="lead">章全体の入口。「IDおよびアクセス管理」とは何を指すのか、なぜ最初に学ぶのかを押さえます。</p>
+    <h2><span class="code">2-1</span>IDおよびアクセス管理</h2>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-1</span><h3>IDおよびアクセス管理とは</h3></div>
+      <p class="role">「誰が・何に・どこまで触れるか」を管理する考え方</p>
+      <p>ID（誰なのか＝認証）とアクセス権（何ができるか＝認可）をセットで管理する仕組みの総称です。クラウドでは物理的な鍵やケーブルがない分、この管理がセキュリティの中心になります。</p>
+      <span class="gloss"><b>認証(Authentication)</b>＝本人確認（ログイン）。<b>認可(Authorization)</b>＝その人に許す操作の範囲。2つは別物で、IAMはこの両方を扱います。</span>
+      <div class="winbox"><b>運用のイメージ</b>：Windowsで「ログインできること」と「特定フォルダを編集できること」が別管理なのと同じ。AWSでは全リソースにこの考え方が及びます。</div>
+    </div>
+  </section>
+
+  <!-- 2-2 -->
+  <section class="panel" id="s2">
+    <p class="lead">この章の主役。AWSアカウント内部で「誰が何をできるか」を決める中核サービスです。安全に運用するための仕組みもここに含まれます。</p>
+    <h2><span class="code">2-2</span>AWS IAM</h2>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-1</span><h3>概要</h3></div>
+      <p class="role">IAMが何者で、何のためにあるか</p>
+      <p>IAM（Identity and Access Management）はAWSの認証・認可を一手に担うサービスです。追加料金なしで全リージョンに効きます。最初に作られる「ルートユーザー」は最強権限なので、普段使いせず金庫にしまうのが鉄則です。</p>
+      <span class="gloss"><b>ルートユーザー</b>＝アカウント作成時のメールアドレスでログインする最上位アカウント。Windowsの Administrator より強く、アカウントの解約など一部の操作はルートユーザー専用です。日常利用は厳禁。なお請求情報の閲覧は、設定でIAMユーザーにも委譲できます。</span>
+    </div>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-2</span><h3>IAMの機能</h3></div>
+      <p class="role">IAMを構成する4つの部品</p>
+      <p><b>ユーザー</b>＝人やアプリを表すアカウント（認証方法はID/PW・アクセスキー・MFA）。<b>グループ</b>＝ユーザーの束ね役。<b>ポリシー</b>＝できる/できないを定義した権限の中身。<b>ロール</b>＝必要なときだけ借りる一時的な権限。</p>
+      <span class="gloss"><b>アクセスキー</b>＝プログラムやCLIから操作するための鍵（IDとパスワードの文字列版）。<b>MFA</b>＝ログイン時にスマホアプリの数字も求める追加認証。<b>ポリシー</b>はJSONで書かれ、PowerShellのスクリプトのように「許可ルールの定義ファイル」と捉えると馴染みやすいです。</span>
+      <div class="winbox"><b>最重要ポイント</b>：ロールはAWS特有の概念。EC2やLambdaにロールを割り当てると、アクセスキーを埋め込まずに権限を渡せます。キーの管理事故を防げるため、実務で多用します。</div>
+    </div>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-3</span><h3>AWSアカウント・IAMの設計運用原則</h3></div>
+      <p class="role">事故を起こさない使い方のルール</p>
+      <p>ルートユーザーは封印しMFAをかける、日常作業はIAMユーザー/ロールで行う、権限は必要最小限から始める、といった「決めごと」を学びます。最初に型を覚えると後の事故を大きく減らせます。</p>
+      <span class="gloss"><b>最小権限の原則</b>＝とりあえず全部許可ではなく、必要な操作だけを許可する考え方。困ったら足す方が、与えすぎて漏れるより安全です。</span>
+    </div>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-4</span><h3>パーミッションバウンダリー</h3></div>
+      <p class="role">権限の「上限のフタ」</p>
+      <p>IAMユーザーまたはIAMロールに対して、与えられる権限の上限を定める仕組みです（グループには設定できません）。実際に使える権限は「付与したポリシー」と「この上限」の<b>両方で許可された部分だけ</b>になります。管理者権限を付けても上限がS3だけならS3しか触れません。</p>
+      <span class="gloss"><b>使いどころ</b>＝権限付与を他チームに任せたいが、暴走はさせたくないとき。「ここから先は絶対に超えさせない」という安全柵として働きます。バウンダリー単独で許可を与えるものではなく、あくまで上限を絞る役割です。</span>
+    </div>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-5</span><h3>IAMアクセスアナライザー</h3></div>
+      <p class="role">権限の「見張り役・点検係」</p>
+      <p>リソースが外部アカウントや一般公開に晒されていないかを解析して検出するサービスです。設定ミスによる情報漏れを、人が気づく前に警告してくれます。</p>
+      <span class="gloss"><b>位置づけ</b>＝バウンダリーが「事前の予防」なら、アナライザーは「事後の検知」。Windowsのセキュリティ監査ログを自動で読んで危険を教えてくれるイメージです。</span>
+      <span class="gloss"><b>料金の注意</b>：外部アクセス（パブリック・クロスアカウント）の検出は追加料金なしで使えます。一方、未使用権限の検出や内部アクセス分析は有料機能です。どこまで使うかで費用が変わる点は、予算検討時に押さえておきましょう。</span>
+    </div>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-6</span><h3>アカウント間でのスイッチロールによるAWS利用</h3></div>
+      <p class="role">別アカウントの権限を「借りて」操作する</p>
+      <p>本番用・開発用などアカウントを分けて運用する際、ログインし直さずに別アカウントのロールへ切り替えて作業する仕組みです。1人が複数アカウントを安全に行き来できます。</p>
+      <span class="gloss"><b>スイッチロール</b>＝自分のアカウントから、許可された別アカウントのロールに一時的に乗り換える操作。runas で別ユーザー権限のコマンドを実行する感覚に近いです。</span>
+    </div>
+
+    <div class="item">
+      <div class="head"><span class="secno">2-2-7</span><h3>まとめ</h3></div>
+      <p class="role">2-2節の振り返り</p>
+      <p>IAMの4部品・運用原則・安全機構(バウンダリー/アナライザー)・複数アカウント運用(スイッチロール)を一通り押さえる節です。</p>
+    </div>
+  </section>
+
+  <!-- 2-3 -->
+  <section class="panel" id="s3">
+    <p class="lead">社内の既存ID基盤(Active Directory)をAWSとつなぐ話。IAMが社内ADと連携する周辺サービスです。</p>
+    <h2><span class="code">2-3</span>AWS Directory Service</h2>
+
+    <div class="item win">
+      <div class="head"><span class="secno">2-3-1</span><h3>概要</h3></div>
+      <p class="role">ADをAWS上で使えるようにするサービス</p>
+      <p>Windowsでお馴染みのActive Directoryを、AWSのマネージドサービスとして提供する仕組みです。既存の社内アカウントをそのままAWSやWindowsサーバーの認証に使えるようにします。</p>
+      <span class="gloss"><b>マネージドサービス</b>＝サーバー構築や保守をAWSが代行してくれる提供形態。自分でドメインコントローラを立てて運用する手間が減ります。</span>
+    </div>
+
+    <div class="item win">
+      <div class="head"><span class="secno">2-3-2</span><h3>AWSにおけるActive Directory関係のサービス一覧</h3></div>
+      <p class="role">ADまわりの選択肢を把握する</p>
+      <p>フル機能の「AWS Managed Microsoft AD」、軽量な「AD Connector」「Simple AD」など、用途や規模に応じた複数の選択肢を比較する節です。どれを選ぶかで構成が変わります。</p>
+      <span class="gloss"><b>AD Connector</b>＝AWS側にADを置かず、社内ADへ問い合わせを中継するだけの窓口役。<b>Managed Microsoft AD</b>＝AWS上に本格的なADを構築する方式です。<b>Simple AD</b>＝最も安価ですが、他ドメインとの信頼関係・MFA・FSx for Windowsとの連携などが非対応。小規模・単純用途向けと割り切る必要があります。</span>
+    </div>
+
+    <div class="item win">
+      <div class="head"><span class="secno">2-3-3</span><h3>オンプレミスとの接続パターン</h3></div>
+      <p class="role">社内ネットワークとAWSのつなぎ方</p>
+      <p>社内にあるADとAWSを、専用線(Direct Connect)やVPNでどう接続するかのパターンを学びます。既存の社内環境を活かしながらクラウドへ広げる際の土台です。</p>
+      <span class="gloss"><b>オンプレミス</b>＝自社の建物やデータセンターに置いた、従来型の自前サーバー環境のこと。クラウドの対義語として使われます。</span>
+    </div>
+
+    <div class="item win">
+      <div class="head"><span class="secno">2-3-4</span><h3>AWSにおけるActive Directoryの利用パターン</h3></div>
+      <p class="role">実際の構成パターンを知る</p>
+      <p>社内ADを正とする構成、AWS側を正とする構成、両者を信頼関係で結ぶ構成など、典型的な使い方を整理します。自社の状況に近い型を選ぶ判断材料になります。</p>
+    </div>
+
+    <div class="item win">
+      <div class="head"><span class="secno">2-3-5</span><h3>まとめ</h3></div>
+      <p class="role">2-3節の振り返り</p>
+      <p>AD関連サービスの種類・接続方法・利用パターンを整理する節。「既存の社内IDをどうAWSに活かすか」が一貫したテーマです。</p>
+    </div>
+  </section>
+
+  <!-- 2-4 -->
+  <section class="panel" id="s4">
+    <p class="lead">社外の一般ユーザー(アプリ利用者)向けの認証サービス。IAMが社内向けなのに対し、Cognitoは不特定多数向けです。</p>
+    <h2><span class="code">2-4</span>Amazon Cognito</h2>
+
+    <div class="item" style="border-left-color:var(--coral)">
+      <div class="head"><span class="secno" style="color:var(--coral);background:var(--coral-bg)">2-4-1</span><h3>概要</h3></div>
+      <p class="role">アプリ利用者のログインを担うサービス</p>
+      <p>Webやスマホアプリのエンドユーザーがログインするための認証基盤です。数万〜数百万人規模の一般ユーザーを管理でき、IAMとは役割がはっきり分かれます。</p>
+      <span class="gloss"><b>住み分け</b>：IAM＝社内の管理者・開発者向け／Cognito＝アプリを使う社外の一般ユーザー向け。エンドユーザー全員にIAMユーザーを作るのは破綻するので、ここをCognitoが担います。</span>
+    </div>
+
+    <div class="item" style="border-left-color:var(--coral)">
+      <div class="head"><span class="secno" style="color:var(--coral);background:var(--coral-bg)">2-4-2</span><h3>Cognitoと認証認可の流れ</h3></div>
+      <p class="role">ログインから権限取得までの道のり</p>
+      <p>ユーザーがログインし、本人確認が済み、AWSリソースを使うための一時的な権限を受け取るまでの一連の流れを追います。全体像をつかむと後の用語が理解しやすくなります。</p>
+      <span class="gloss"><b>トークン</b>＝ログイン成功後に発行される「本人確認済みの通行証」。以降の操作はこの通行証を提示して行います。</span>
+    </div>
+
+    <div class="item" style="border-left-color:var(--coral)">
+      <div class="head"><span class="secno" style="color:var(--coral);background:var(--coral-bg)">2-4-3</span><h3>Cognitoユーザープール</h3></div>
+      <p class="role">ユーザーの名簿・ログイン窓口</p>
+      <p>アプリ利用者のアカウント情報(メール、パスワード等)を保管し、ログイン処理そのものを担う部分です。新規登録やパスワード再設定の機能もここが提供します。</p>
+      <span class="gloss"><b>ユーザープール</b>＝「誰がいるか」を管理する利用者名簿＋ログイン受付。まずここで本人確認(認証)を行います。</span>
+    </div>
+
+    <div class="item" style="border-left-color:var(--coral)">
+      <div class="head"><span class="secno" style="color:var(--coral);background:var(--coral-bg)">2-4-4</span><h3>CognitoIDプール（Federated Identities）</h3></div>
+      <p class="role">AWSリソースを使う一時権限の発行役</p>
+      <p>ログイン済みのユーザーに対し、S3やDynamoDBなど実際のAWSリソースを操作できる一時的な権限(IAMロール)を渡す部分です。Googleログインなど外部IDとの連携もここが担います。</p>
+      <span class="gloss"><b>ユーザープールとの違い</b>：ユーザープール＝「誰か」を確認(認証)。IDプール＝「何を触れるか」を渡す(認可)。<b>Federated Identities(フェデレーション)</b>＝GoogleやFacebookなど外部のログインを使わせてもらう連携の仕組みです。</span>
+    </div>
+
+    <div class="item" style="border-left-color:var(--coral)">
+      <div class="head"><span class="secno" style="color:var(--coral);background:var(--coral-bg)">2-4-5</span><h3>まとめ</h3></div>
+      <p class="role">2-4節の振り返り</p>
+      <p>Cognitoの全体の流れと、ユーザープール(認証)＋IDプール(認可)の役割分担を押さえる節です。</p>
+    </div>
+  </section>
+
+  <!-- 2-5 -->
+  <section class="panel" id="s5">
+    <p class="lead">ここまでの知識を実務に落とす章。「どう設計すれば安全か」という実践的な原則と具体例を学びます。</p>
+    <h2><span class="code">2-5</span>アーキテクチャ・実例</h2>
+
+    <div class="item" style="border-left-color:var(--green)">
+      <div class="head"><span class="secno" style="color:var(--green);background:var(--green-bg)">2-5-1</span><h3>最小権限付与の原則を守る</h3></div>
+      <p class="role">必要な分だけ許可する設計の徹底</p>
+      <p>「とりあえず全部許可」を避け、本当に必要な操作だけを与える設計の実践方法です。権限を絞ることが、情報漏れや誤操作を防ぐ最も効果的な対策になります。</p>
+      <span class="gloss"><b>なぜ重要か</b>＝与えすぎた権限は、アカウントが乗っ取られたときの被害をそのまま広げます。少なく始めて必要時に足すのが安全側の運用です。</span>
+    </div>
+
+    <div class="item" style="border-left-color:var(--green)">
+      <div class="head"><span class="secno" style="color:var(--green);background:var(--green-bg)">2-5-2</span><h3>サービスからのIAMロールの利用を理解する</h3></div>
+      <p class="role">EC2やLambdaに権限を持たせる方法</p>
+      <p>人ではなくAWSのサービス自身(EC2サーバーやLambda関数など)が他のリソースを操作する場面で、ロールをどう割り当てるかを学びます。アクセスキーを埋め込まない安全な定番手法です。</p>
+      <div class="winbox"><b>スクリプト経験者向け</b>：PowerShellやPythonをLambdaやEC2上で動かしてS3等を操作する場合、コードにキーを書く代わりにロールを割り当てるのが正解。キー流出のリスクをゼロにできます。</div>
+    </div>
+
+    <div class="item" style="border-left-color:var(--green)">
+      <div class="head"><span class="secno" style="color:var(--green);background:var(--green-bg)">2-5-3</span><h3>まとめ</h3></div>
+      <p class="role">2-5節の振り返り</p>
+      <p>最小権限とロール活用という、実務で最も効く2大原則を確認する節です。</p>
+    </div>
+  </section>
+
+  <!-- 2-6 -->
+  <section class="panel" id="s6">
+    <p class="lead">章全体の総まとめ。各節の関係を俯瞰し、学んだ知識を一本につなげます。</p>
+    <h2><span class="code">2-6</span>IDおよびアクセス管理 まとめ</h2>
+
+    <div class="item" style="border-left-color:var(--amber)">
+      <div class="head"><span class="secno" style="color:var(--amber);background:var(--amber-bg)">2-6</span><h3>章全体の振り返り</h3></div>
+      <p class="role">2章で学んだことの全体像</p>
+      <p>IAM(社内の認証・認可の中心)を軸に、Directory Service(既存ADの連携)とCognito(社外ユーザーの認証)が周辺を固め、最後に最小権限とロール活用で実務設計に落とす——という一本の流れを確認します。</p>
+    </div>
+
+    <div class="note">
+      <strong>学習の優先順位（運用1週目のおすすめ）</strong>
+      <ul>
+        <li>まず2-2のIAM4部品、特に「ユーザー vs ロール」の違いを腹落ちさせる</li>
+        <li>2-5-1「最小権限」と2-5-2「サービスからのロール利用」は実務直結なので早めに</li>
+        <li>2-3(AD)はWindows知識がそのまま活きる。社内AD連携の話が出たら読み返す</li>
+        <li>2-4(Cognito)はアプリ開発に関わるまでは「IAMとの住み分け」だけ覚えておけば十分</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ★ 統制図 -->
+  <section class="panel" id="s7">
+    <p class="gov-intro">IAMの全体像を「<b>組み立てる → 制御する → 点検する</b>」の三層で捉える俯瞰図です。研修では各層の役割分担を、決裁では「なぜ安全と言えるか」を一目で説明できます。</p>
+    <h2><span class="code">★</span>IAM統制の三層構造</h2>
+
+    <!-- LAYER 3 : Analyzer -->
+    <div class="layer layer-l3">
+      <div class="layer-label">
+        <span class="layer-badge badge-l3">点検層</span>
+        <span class="layer-title">IAMアクセスアナライザー</span>
+      </div>
+      <p class="layer-sub">リソースへの外部アクセス（公開・クロスアカウント）を解析して検出し、意図しない漏れを警告する（見張り役）</p>
+
+      <!-- LAYER 2 : Boundary -->
+      <div class="layer layer-l2">
+        <div class="layer-label">
+          <span class="layer-badge badge-l2">制御層</span>
+          <span class="layer-title">パーミッションバウンダリー</span>
+        </div>
+        <p class="layer-sub">この枠を超える権限は無効化される「権限の上限」。下の層で付けすぎても、ここで止まる（対象はユーザー・ロール）</p>
+
+        <!-- LAYER 1 : 4 functions -->
+        <div class="layer layer-l1">
+          <div class="layer-label">
+            <span class="layer-badge badge-l1">構成層</span>
+            <span class="layer-title">IAMの4機能</span>
+          </div>
+          <p class="layer-sub">「誰が・何を・できるか」をここで組み立てる</p>
+
+          <div class="func-grid">
+            <div class="func">
+              <span class="ftag">主体</span>
+              <span class="fname">IAMユーザー</span>
+              <span class="fdesc">人・アプリの常設アカウント</span>
+            </div>
+            <div class="func f-role">
+              <span class="ftag">主体</span>
+              <span class="fname">IAMロール</span>
+              <span class="fdesc">一時的に借りる権限</span>
+            </div>
+            <div class="func f-group">
+              <span class="ftag">束ね</span>
+              <span class="fname">IAMグループ</span>
+              <span class="fdesc">ユーザーをまとめる</span>
+            </div>
+            <div class="func f-policy">
+              <span class="ftag">中身</span>
+              <span class="fname">IAMポリシー</span>
+              <span class="fdesc">許可の定義（権限の中身）</span>
+            </div>
+          </div>
+          <div class="func-note"><b>整理のしかた</b>：ユーザー／ロールが主役、ポリシーがその権限の中身。グループでユーザーを束ねてポリシーを一括付与。常設の人は<b>ユーザー</b>、サービスや一時利用は<b>ロール</b>で使い分ける。</div>
+        </div>
+
+        <div class="layer-foot"><b>制御層の役割</b>：構成層で誤って強い権限を付けても、この上限が「ここから先は不可」と機械的に遮断する安全柵。</div>
+      </div>
+
+      <div class="layer-foot"><b>点検層の役割</b>：構成・制御の結果として「外部に開きすぎていないか」を継続的に監査し、危険な公開設定を人が気づく前に警告する。</div>
+    </div>
+
+    <!-- reading direction -->
+    <div class="decision">
+      <p class="layer-sub" style="text-align:center;margin:18px 0 12px">三層を言葉にすると</p>
+      <div class="dgrid">
+        <div class="dcard">
+          <span class="dlabel">Step 1 ・ 構成</span>
+          <h4>4機能で組み立てる</h4>
+          <p>ユーザー・グループ・ポリシー・ロールで「誰が何をできるか」を設計する。</p>
+        </div>
+        <div class="dcard">
+          <span class="dlabel">Step 2 ・ 制御</span>
+          <h4>バウンダリーで上限を定める</h4>
+          <p>付与しうる権限に天井を設け、付けすぎ・暴走を構造的に防ぐ。</p>
+        </div>
+        <div class="dcard">
+          <span class="dlabel">Step 3 ・ 点検</span>
+          <h4>アナライザーで監査する</h4>
+          <p>出来上がった状態のうち「外部への露出」を継続的に見張り、漏れを自動検出する。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>この図の使いどころ</strong>
+      <ul>
+        <li><b>研修用</b>：用語を個別に覚えるのではなく「3つの層の役割分担」として一度に理解できる</li>
+        <li><b>決裁・説明用</b>：「組み立て・制御・点検が揃っている＝統制が効いている」と上位層に一言で示せる</li>
+        <li>内側ほど日常的に触る部分、外側ほど安全を担保する仕組み、と覚えると関係が崩れない</li>
+        <li>アナライザーは万能の監査ではなく「外部アクセスの検出」が主務。バウンダリーの設定ミスそのものを直接見つける機能ではない点に注意</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>AWS 2章 IDおよびアクセス管理 学習マップ ・ オフライン閲覧可能</footer>
+
+<script>
+  const buttons = document.querySelectorAll('nav button');
+  const panels = document.querySelectorAll('.panel');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const target = btn.dataset.target;
+      buttons.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+</script>
+</body>
+</html>
